@@ -16,11 +16,16 @@ post '/receive_mms' do
   end
 end
 
-get '/last_mms' do
+get '/mms' do
+  erb :mms
+end
+
+get '/last_mms.jpg' do
   attachments_boundary = last_mms_received.match(/boundary="(.+)"/)[1]
 
   attachment_body = last_mms_received.match(/--#{attachments_boundary}(.+)--#{attachments_boundary}/m)[1]
-  
+  attachment_body += "--#{attachments_boundary}\r\n"
+
   next_index = attachment_body.index "--#{attachments_boundary}"
 
   attachments = []
