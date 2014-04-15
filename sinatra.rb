@@ -1,18 +1,23 @@
 require 'sinatra'
 require 'base64'
-require 'pry'
-require 'pry-remote'
 require 'pstore'
 
-require 'webrick'
-require 'stringio'
+require 'json'
+
+require "net/http"
+require "uri"
+
+
 
 set :bind, '0.0.0.0'
 
+
 post '/receive_mms' do
+  body = Net::HTTP.get_response(URI.parse(JSON.parse(request.body.string)["images"][0]["image"])).body
+
   last_mms = PStore.new("last_mms.pstore")
   last_mms.transaction do 
-    last_mms[:body] = request["body"]
+    last_mms[:body] = body
   end
 end
 
@@ -21,6 +26,11 @@ get '/mms' do
 end
 
 get '/last_mms.jpg' do
+  headers 'Content-Type' => "image/jpeg", 'Strict-Transport-Security' => "1"
+  last_mms_received
+end
+
+get '/last_mms_att.jpg' do
   attachments_boundary = last_mms_received.match(/boundary="(.+)"/)[1]
 
   attachment_body = last_mms_received.match(/--#{attachments_boundary}(.+)--#{attachments_boundary}/m)[1]
