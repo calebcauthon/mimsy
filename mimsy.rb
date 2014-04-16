@@ -12,9 +12,14 @@ require 'uri'
 require './lib/storage.rb'
 require './lib/web.rb'
 require './lib/mogreet_parser.rb'
+require './lib/text_sender.rb'
 
 
 set :bind, '0.0.0.0'
+
+post '/ask' do
+  TextSender.send_mms_notification params[:phone_number], "Reply with word \"mimsy\" and an image to upload your image."
+end
 
 post '/receive_mms' do
   input = request.body.read
@@ -23,6 +28,8 @@ post '/receive_mms' do
   phone_number = Web.get_phone_number input
   
   Storage.save phone_number, body
+
+  TextSender.send_mms_notification phone_number, "Your image has been saved at http://#{request.host}/#{phone_number}.jpg"
 end
 
 get '/mms' do
