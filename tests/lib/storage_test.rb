@@ -4,16 +4,13 @@ require 'sinatra.rb'  # <-- your sinatra app
 require 'rspec'
 require 'rack/test'
 require 'storage.rb'
+require 'pstore'
 
 describe 'storage' do
   include Rack::Test::Methods
 
   def app
     Sinatra::Application
-  end
-
-  it "exists" do
-    Storage
   end
 
   [{ key: "food", value: "applesauce" }, { key: "animal", value: "cat" }].each do |hash|
