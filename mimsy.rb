@@ -7,6 +7,7 @@ require 'json'
 require 'net/http'
 require 'uri'
 require './lib/storage.rb'
+require './lib/web.rb'
 
 set :bind, '0.0.0.0'
 
