@@ -13,4 +13,8 @@ describe 'storage' do
       Storage.retrieve(hash[:key]).must_equal hash[:value]
     end
   end
+
+  it "returns nil if nothing is saved there" do
+    Storage.retrieve("whatever").must_equal nil
+  end
 end

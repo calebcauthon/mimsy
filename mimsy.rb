@@ -18,7 +18,15 @@ require './lib/text_sender.rb'
 set :bind, '0.0.0.0'
 
 post '/ask' do
-  TextSender.send_mms_notification params[:phone_number], "Reply with word \"mimsy\" and an image to upload your image."
+  phone_number = params[:phone_number].gsub(/[^0-9]/, '')
+  phone_number = "1#{phone_number}" if phone_number[0] != "1"
+    
+
+  TextSender.send_mms_notification phone_number, "Reply with word \"testmimsy\" and an image to upload your image."
+  {
+    filename: "#{phone_number}.jpg",
+    image_url: "http://#{request.host}/#{phone_number}.jpg"
+  }.to_json
 end
 
 post '/receive_mms' do
@@ -42,8 +50,14 @@ get '/last_mms.jpg' do
 end
 
 get %r{/([\d]+)\.jpg} do
-  headers 'Content-Type' => "image/jpeg", 'Strict-Transport-Security' => "1"
-  Storage.retrieve params[:captures][0]
+  result = Storage.retrieve params[:captures][0]
+
+  if result
+    headers 'Content-Type' => "image/jpeg", 'Strict-Transport-Security' => "1"
+    result
+  else
+    "0"
+  end
 end
 
 def last_mms_received

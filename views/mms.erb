@@ -1,10 +1,34 @@
-<img style="position: absolute; width:100%;" id="image" src="last_mms.jpg" />
-<h1 style="background: black; color: white; padding: .25em; font-family: Arial; position: absolute;">Send a text with the word "mimsy" and an image attached to 343434,<br /> then wait 10 seconds</h1>
+<style>
+* { font-family: Arial; text-align: center; }
+</style>
+<h1 style="font-family: Arial; ">Upload an image via text from your phone</h1>
+<div style="margin: 0 auto; border: 1px solid black; font-family: Arial; height: 100px; width: 200px;"><img id="image" style="position: absolute; width: 200px;" />Your image will show up here.</div>
+
+
+<h3>What's your phone number?</h3>
+<input id="phone" placeholder="123-123-1234" />
+<button>Go!</button>
 
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="mimsy.js"></script>
 <script type="text/javascript">
-  setInterval(function() {
-    document.getElementById('image').src = document.getElementById('image').src
-  }, 10000);
+  
+  $('button').click(function() {
+    var phone_number = $('#phone').val();
+
+    if(phone_number == "") {
+      alert("Gotta type your phone number in first, e.g, 444-222-8888");
+      return;
+    }
+    
+    Mimsy.ask(phone_number, function(image_url) {
+      $('#waiting').hide();
+      $('img#image').attr('src', image_url);
+    })  
+
+    alert("You will receive a text with instructions in a few seconds.");
+
+  })
+  
+
 </script>
