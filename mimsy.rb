@@ -7,18 +7,10 @@ require 'json'
 require "net/http"
 require "uri"
 
-
-
 set :bind, '0.0.0.0'
 
-
 post '/receive_mms' do
-  body = Net::HTTP.get_response(URI.parse(JSON.parse(request.body.string)["images"][0]["image"])).body
-
-  last_mms = PStore.new("last_mms.pstore")
-  last_mms.transaction do 
-    last_mms[:body] = body
-  end
+  Storage.save "body", Web.get_image(request.body)
 end
 
 get '/mms' do
@@ -61,6 +53,5 @@ get '/last_mms_att.jpg' do
 end
 
 def last_mms_received
-  last_mms = PStore.new("last_mms.pstore")
-  last_mms.transaction { last_mms[:body] }
+  Storage.retrieve "body", body
 end
