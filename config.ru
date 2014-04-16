@@ -1,2 +1,2 @@
-require './sinatra'
+require './mimsy'
 run Sinatra::Application
