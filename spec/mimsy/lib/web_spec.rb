@@ -24,4 +24,16 @@ describe 'web' do
 
     image = Web.get_image "mock input"
   end
+
+  it "uses the parser to get a phone number" do
+    class Web
+      module Parser
+        def self.parse json
+          { phone: "913-123-0000" }
+        end
+      end
+    end
+    
+    Web.get_phone_number("mock input").must_equal "913-123-0000"
+  end
 end

@@ -9,10 +9,12 @@ describe 'receive_mms' do
 
   it 'exists' do
     Web.stubs(:get_image).returns :image
+    Web.stubs(:get_phone_number).returns :number
 
-    Storage.expects(:save).with "body", :image
+    Storage.expects(:save).with :number, :image
     
     post '/receive_mms'
+    
     last_response.status.must_equal 200
   end
 end
