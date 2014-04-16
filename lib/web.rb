@@ -1,5 +1,5 @@
 class Web
-  def parse http_post_request
+  def self.parse http_post_request
     JSON.parse(http_post_request.string)["images"][0]["image"]
   end
 
