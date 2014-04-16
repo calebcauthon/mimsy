@@ -4,15 +4,21 @@ require 'pstore'
 
 require 'json'
 
+require 'pry'
+require 'pry-remote'
+
 require 'net/http'
 require 'uri'
 require './lib/storage.rb'
 require './lib/web.rb'
+require './lib/mogreet_parser.rb'
+
 
 set :bind, '0.0.0.0'
 
 post '/receive_mms' do
-  Storage.save "body", Web.get_image(request.body)
+  body = Web.get_image request.body.read
+  Storage.save "body", body
 end
 
 get '/mms' do
