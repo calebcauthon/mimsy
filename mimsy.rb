@@ -4,8 +4,9 @@ require 'pstore'
 
 require 'json'
 
-require "net/http"
-require "uri"
+require 'net/http'
+require 'uri'
+require './lib/storage.rb'
 
 set :bind, '0.0.0.0'
 
@@ -53,5 +54,5 @@ get '/last_mms_att.jpg' do
 end
 
 def last_mms_received
-  Storage.retrieve "body", body
+  Storage.retrieve "body"
 end
