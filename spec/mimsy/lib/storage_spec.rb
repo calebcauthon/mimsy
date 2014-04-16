@@ -1,10 +1,4 @@
-ENV['RACK_ENV'] = 'test'
-
-require 'sinatra.rb'  # <-- your sinatra app
-require 'rspec'
-require 'rack/test'
-require 'storage.rb'
-require 'pstore'
+require File.expand_path(File.dirname(__FILE__) + '/../../../spec/spec_helper.rb')
 
 describe 'storage' do
   include Rack::Test::Methods
@@ -16,7 +10,7 @@ describe 'storage' do
   [{ key: "food", value: "applesauce" }, { key: "animal", value: "cat" }].each do |hash|
     it "saves stuff" do
       Storage.save hash[:key], hash[:value]
-      expect(Storage.retrieve(hash[:key])).to eql(hash[:value])
+      Storage.retrieve(hash[:key]).must_equal hash[:value]
     end
   end
 end
